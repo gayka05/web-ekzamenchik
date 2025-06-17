@@ -303,15 +303,6 @@ body {
     margin: 0 auto 40px auto;
 }
 
-/* Карточка книги */
-.book-card {
-    background: var(--yellow-light);
-    border-radius: 15px;
-    box-shadow: 0 6px 15px rgba(106, 76, 147, 0.1);
-    padding: 15px 20px 25px 20px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 
 .book-card:hover {
     transform: translateY(-6px);
