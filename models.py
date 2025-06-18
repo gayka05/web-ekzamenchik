@@ -8,14 +8,14 @@ db = SQLAlchemy()
 
 
 class Role(db.Model):
-    __tablename__ = 'roles'  # <-- исправлено
+    __tablename__ = 'roles'  
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
     description = db.Column(db.Text, nullable=False)
     users = db.relationship('User', backref='role', lazy=True)
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'  # <-- исправлено
+    __tablename__ = 'users' 
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(256), nullable=False)
@@ -32,7 +32,7 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 class Cover(db.Model):
-    __tablename__ = 'covers'  # <-- исправлено
+    __tablename__ = 'covers' 
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(100), nullable=False)
     mime_type = db.Column(db.String(50), nullable=False)
@@ -54,7 +54,7 @@ class Book(db.Model):
     reviews = db.relationship('Review', backref='book', lazy=True, cascade="all, delete-orphan")
 
 class BookView(db.Model):
-    __tablename__ = 'book_views'  # <-- исправлено
+    __tablename__ = 'book_views'  
 
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='CASCADE'))
@@ -66,7 +66,7 @@ class BookView(db.Model):
     user = db.relationship('User', backref='book_views')
 
 class Genre(db.Model):
-    __tablename__ = 'genres'  # <-- исправлено
+    __tablename__ = 'genres' 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
     books = db.relationship('Book', secondary='book_genres', back_populates='genres')
@@ -77,7 +77,7 @@ book_genres = db.Table('book_genres',
 )
 
 class Review(db.Model):
-    __tablename__ = 'reviews'  # <-- исправлено
+    __tablename__ = 'reviews'  
     id = db.Column(db.Integer, primary_key=True)
     book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='CASCADE'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
