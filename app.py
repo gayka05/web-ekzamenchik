@@ -228,31 +228,8 @@ def view_book(book_id):
     if current_user.is_authenticated:
         user_review = Review.query.filter_by(book_id=book.id, user_id=current_user.id).first()
         can_write_review = user_review is None
-
-    if current_user.is_authenticated:
-        user_id = current_user.id
-        session_id = None
     else:
-        if 'visitor_id' not in session:
-            session['visitor_id'] = str(uuid.uuid4())
-            session.modified = True
-        user_id = None
-        session_id = session['visitor_id']
-
-    today_start = datetime.utcnow().replace(hour=0, minute=0, second=0, microsecond=0)
-    today_end = today_start + timedelta(days=1)
-
-    views_count = BookView.query.filter(
-        BookView.book_id == book_id,
-        BookView.viewed_at >= today_start,
-        BookView.viewed_at < today_end,
-        ((BookView.user_id == user_id) if user_id else (BookView.session_id == session_id))
-    ).count()
-
-    if views_count < 10:
-        new_view = BookView(book_id=book_id, user_id=user_id, session_id=session_id)
-        db.session.add(new_view)
-        db.session.commit()
+        can_write_review = False
 
     return render_template('view_book.html', book=book, reviews=reviews, user_review=user_review, can_write_review=can_write_review)
 
