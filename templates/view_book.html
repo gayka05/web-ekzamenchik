@@ -16,7 +16,7 @@
         {% endfor %}
     </p>
 
-    <h2>Описание</h2>
+    <h2>Описание:</h2>
     <div class="book-description">
         <p>{{ book.description }}</p>
     </div>
@@ -47,7 +47,7 @@
         {% endfor %}
     </div>
 {% else %}
-    <p>Пока нет рецензий на эту книгу.</p>
+    <p>Нет рецензий на эту книгу.</p>
 {% endif %}
 
 {% if current_user.is_authenticated and current_user.role.name in ['user', 'moderator', 'admin'] %}
