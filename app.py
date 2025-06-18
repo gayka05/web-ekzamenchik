@@ -13,7 +13,7 @@ import uuid
 from flask_migrate import Migrate
 
 app = Flask(__name__)
-app.config.from_object(Config)
+app.config.from_object(Config) # Загрузка конфигурации из класса Config
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -25,10 +25,6 @@ migrate = Migrate(app, db)
 
 with app.app_context():
     db.create_all()
-    # Удаляем старых пользователей (кроме admin и moderator1, если нужно)
-    User.query.filter(User.login.notin_(['admin', 'moderator1'])).delete()
-    db.session.commit()
-
     existing_roles = {role.name for role in Role.query.all()}
     roles_to_add = [
         Role(name='admin', description='Администратор (полный доступ)'),
@@ -111,9 +107,11 @@ def role_required(*required_roles):
         return decorated_function
     return decorator
 
+# Проверка допустимого расширения файла
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
+# Сохранение файла обложки книги
 def save_cover_file(file_storage):
     filename = secure_filename(file_storage.filename)
     if '.' not in filename:
@@ -148,20 +146,22 @@ def save_cover_file(file_storage):
         raise IOError(f"Ошибка при сохранении файла обложки: {e}")
     return cover
 
+# Загрузка пользователя для Flask-Login
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+# Главная страница с поиском и фильтрацией книг
 @app.route('/')
 def index():
     # Генерация visitor_id для неаутентифицированных пользователей (если нужно)
     if not current_user.is_authenticated:
         if 'visitor_id' not in session:
             session['visitor_id'] = str(uuid.uuid4())
+    # Получение параметров поиска из запроса
 
     page = request.args.get('page', 1, type=int)
 
-    # Получаем параметры поиска из query string
     title = request.args.get('title', '', type=str).strip()
     author = request.args.get('author', '', type=str).strip()
     genre_ids = request.args.getlist('genre', type=int)
@@ -169,9 +169,8 @@ def index():
     pages_from = request.args.get('pages_from', type=int)
     pages_to = request.args.get('pages_to', type=int)
 
-    # Начинаем запрос с фильтрацией
     query = Book.query
-
+ # Формирование запроса к базе данных
     if title:
         query = query.filter(Book.title.ilike(f'%{title}%'))
     if author:
@@ -185,7 +184,7 @@ def index():
     if pages_to is not None:
         query = query.filter(Book.pages <= pages_to)
 
-    # Сортировка по году по убыванию
+
     query = query.order_by(Book.year.desc())
 
     # Пагинация
@@ -199,7 +198,7 @@ def index():
         else:
             book.avg_rating = 0
 
-    # Получаем все жанры и годы для формы (нужно для заполнения мультиселектов)
+    # Получаем все жанры и годы для формы 
     genres = Genre.query.order_by(Genre.name).all()
     years = [y[0] for y in db.session.query(Book.year).distinct().order_by(Book.year).all()]
 
@@ -232,7 +231,7 @@ def view_book(book_id):
         can_write_review = False
 
     return render_template('view_book.html', book=book, reviews=reviews, user_review=user_review, can_write_review=can_write_review)
-
+# Страница входа
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -250,13 +249,13 @@ def login():
         return redirect(next_page or url_for('index'))
 
     return render_template('login.html')
-
+# Выход пользователя из системы
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
+# Добавление новой книги (только для администратора)
 @app.route('/books/new', methods=['GET', 'POST'])
 @login_required
 @role_required('admin')
@@ -276,7 +275,7 @@ def new_book():
 
             allowed_tags = bleach.sanitizer.ALLOWED_TAGS.union({'p', 'br', 'ul', 'li', 'strong', 'em', 'a'})
             description = bleach.clean(description_raw, tags=allowed_tags, strip=True)
-
+# Проверяем наличие обложки
             if 'cover' not in request.files:
                 flash('Файл обложки обязателен', 'danger')
                 raise ValueError('Файл обложки обязателен')
@@ -309,7 +308,7 @@ def new_book():
             return render_template('book_form.html', book=None, genres=genres, now=now)
 
     return render_template('book_form.html', book=None, genres=genres, now=now)
-
+# Редактирование книги (доступно админу и модератору)
 @app.route('/books/<int:book_id>/edit', methods=['GET', 'POST'])
 @login_required
 @role_required('admin', 'moderator')
@@ -320,6 +319,7 @@ def edit_book(book_id):
 
     if request.method == 'POST':
         try:
+            # Обновляем данные книги
             book.title = request.form['title'].strip()
             book.author = request.form['author'].strip()
             book.year = int(request.form['year'])
@@ -346,14 +346,14 @@ def edit_book(book_id):
             return render_template('book_form.html', book=book, genres=genres, now=now)
 
     return render_template('book_form.html', book=book, genres=genres, now=now)
-
+# Удаление книги (только для администратора)
 @app.route('/books/<int:book_id>/delete', methods=['POST'])
 @login_required
 @role_required('admin')
 def delete_book(book_id):
     book = Book.query.get_or_404(book_id)
 
-    # Затем удаляем обложку (если она существует)
+    # Удаляем файл обложки, если он существует
     cover = book.cover  # Получаем обложку после удаления книги из сессии
     cover_path = os.path.join(app.static_folder, 'covers', cover.filename)
     if os.path.exists(cover_path):
@@ -367,16 +367,16 @@ def delete_book(book_id):
 
     flash(f'Книга "{book.title}" успешно удалена.', 'success')
     return redirect(url_for('index'))
-
+# Добавление рецензии к книге
 @app.route('/books/<int:book_id>/review/new', methods=['GET', 'POST'])
 @login_required
 def add_review(book_id):
     book = Book.query.get_or_404(book_id)
-
+# Проверяем, что пользователь имеет право оставить рецензию
     if current_user.role.name not in ('user', 'moderator', 'admin'):
         flash('У вас недостаточно прав для добавления рецензии', 'danger')
         return redirect(url_for('view_book', book_id=book_id))
-
+# Проверяем, что пользователь ещё не оставлял рецензию на эту книгу
     existing_review = Review.query.filter_by(book_id=book_id, user_id=current_user.id).first()
     if existing_review:
         flash('Вы уже оставили рецензию на эту книгу', 'warning')
@@ -405,7 +405,7 @@ def add_review(book_id):
             flash('Ошибка при сохранении рецензии. Проверьте корректность введённых данных.', 'danger')
 
     return render_template('add_review.html', book=book)
-
+# Удаление рецензии (может удалить автор, админ или модератор)
 @app.route('/reviews/<int:review_id>/delete', methods=['POST'])
 @login_required
 def delete_review(review_id):
