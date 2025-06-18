@@ -3,6 +3,7 @@
 {% block title %}Вход{% endblock %}
 
 {% block content %}
+<div class="login-container">
     <h2>Вход</h2>
 
     {% with messages = get_flashed_messages(category_filter=["error"]) %}
@@ -29,4 +30,5 @@
 
         <button type="submit">Войти</button>
     </form>
+</div>
 {% endblock %}
