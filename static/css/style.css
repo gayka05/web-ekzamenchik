@@ -3,16 +3,16 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    color: #4b3b66; /* чуть темнее пастельно-фиолетового */
-    background: #fffaf0; /* чуть светлее и теплее пастельно-жёлтого */
+    color: #4b3b66; 
+    background: #fffaf0; 
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 header {
-    background: linear-gradient(135deg, #bfa2db 10%, #f0e68c 50%); /* градиент с углом для динамики */
+    background: linear-gradient(135deg, #bfa2db 10%, #f0e68c 50%); 
     color: #3a2e55;
-    padding: 2rem 3rem; /* увеличен отступ */
+    padding: 2rem 3rem; 
     box-shadow: 0 4px 12px rgba(176, 162, 219, 0.4);
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -20,7 +20,7 @@ header {
 
 nav {
     display: flex;
-    justify-content: flex-start; /* выравнивание влево */
+    justify-content: flex-start; 
     align-items: center;
     max-width: 1500px;
     margin: 0 auto;
@@ -247,9 +247,6 @@ footer {
     margin-right: auto;
 }
 
-
-
-/* Основные цвета */
 :root {
     --purple-light: #a18cd1;
     --purple-dark: #6a4c93;
@@ -268,7 +265,6 @@ footer {
     --modal-overlay-bg: rgba(106, 76, 147, 0.6);
 }
 
-/* Общие стили */
 body {
     background-color: var(--background);
     color: var(--text-color);
@@ -278,7 +274,6 @@ body {
     padding: 20px;
 }
 
-/* Кнопка поиска */
 .search-form button {
     background-color: var(--btn-bg);
     color: var(--btn-text);
@@ -298,7 +293,6 @@ body {
     color: var(--btn-text-hover);
 }
 
-/* Сетка книг */
 .books-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -307,7 +301,6 @@ body {
     margin: 0 auto 40px auto;
 }
 
-/* Карточка книги */
 .book-card {
     background: var(--yellow-light);
     border-radius: 15px;
@@ -343,7 +336,6 @@ body {
     color: var(--text-color);
 }
 
-/* Кнопки действий */
 .book-actions {
     margin-top: 15px;
     display: flex;
@@ -371,7 +363,6 @@ body {
     color: var(--btn-text-hover);
 }
 
-/* Кнопка удаления - красная, но с мягким эффектом */
 .book-actions .delete-btn {
     background-color: #e57373;
     box-shadow: 0 3px 8px rgba(229, 115, 115, 0.4);
@@ -383,7 +374,6 @@ body {
     color: #fff;
 }
 
-/* Пагинация */
 .pagination {
     text-align: center;
     margin-bottom: 40px;
@@ -420,7 +410,6 @@ body {
     margin: 0 8px;
 }
 
-/* Кнопка добавления книги */
 .add-book {
     text-align: center;
     margin-bottom: 50px;
@@ -512,8 +501,6 @@ body {
     color: var(--purple-dark);
 }
 
-
-/* Контейнер формы входа */
 .login-container {
     width: 340px;
     height: 340px;
@@ -578,7 +565,6 @@ body {
     accent-color: #fbc02d;
 }
 
-/* Кнопка входа */
 .login-container button[type="submit"] {
     width: 100%;
     padding: 12px 0;
@@ -598,7 +584,6 @@ body {
     color: #6a4c93;
 }
 
-/* Сообщения об ошибках */
 .login-container .error {
     background: #ffeaea;
     color: #c00;
@@ -706,6 +691,112 @@ body {
         gap: 0.7rem;
     }
 }
+
+table.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #3a2f5a;
+    box-shadow: 0 8px 20px rgba(106, 76, 147, 0.1);
+    background: #fffaf0;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+
+
+table.table thead th {
+    padding: 12px 18px;
+    text-align: left;
+}
+
+table.table tbody tr {
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(140, 123, 190, 0.1);
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+table.table tbody tr:hover {
+    background-color: #f3eaff;
+}
+
+
+table.table tbody td {
+    padding: 14px 18px;
+    vertical-align: middle;
+    font-size: 0.95rem;
+    color: #4b3b66;
+}
+
+table.table tbody td a {
+    color: #6a4c93;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+table.table tbody td a:hover {
+    color: #fbc02d;
+}
+
+.btn-success.btn-sm, .btn-danger.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(106, 76, 147, 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    color: #fff9c4;
+}
+
+.btn-success.btn-sm {
+    background-color: #6a4c93;
+}
+
+.btn-success.btn-sm:hover {
+    background-color: #fbc02d;
+    color: #6a4c93;
+    box-shadow: 0 6px 18px rgba(251, 192, 45, 0.7);
+}
+
+.btn-danger.btn-sm {
+    background-color: #d9534f;
+}
+
+.btn-danger.btn-sm:hover {
+    background-color: #c9302c;
+    box-shadow: 0 6px 18px rgba(201, 48, 44, 0.7);
+}
+a.btn.btn-primary.mt-3 {
+    display: inline-block;
+    margin-top: 2rem;
+    background-color: #8c7bbe;
+    color: #fff9c4;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(140, 123, 190, 0.5);
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+a.btn.btn-primary.mt-3:hover {
+    background-color: #fbc02d;
+    color: #6a4c93;
+    box-shadow: 0 8px 24px rgba(251, 192, 45, 0.7);
+}
+
+p {
+    font-size: 1.1rem;
+    color: #6a4c93;
+    margin-top: 3rem;
+    font-weight: 600;
+}
+
 
 
 
