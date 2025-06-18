@@ -5,6 +5,8 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+
+
 class Role(db.Model):
     __tablename__ = 'roles'  # <-- исправлено
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +30,7 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
+    
 class Cover(db.Model):
     __tablename__ = 'covers'  # <-- исправлено
     id = db.Column(db.Integer, primary_key=True)
@@ -36,17 +38,6 @@ class Cover(db.Model):
     mime_type = db.Column(db.String(50), nullable=False)
     md5_hash = db.Column(db.String(32), nullable=False)
     book = db.relationship('Book', back_populates='cover', uselist=False)
-
-class Genre(db.Model):
-    __tablename__ = 'genres'  # <-- исправлено
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False, unique=True)
-    books = db.relationship('Book', secondary='book_genres', back_populates='genres')
-
-book_genres = db.Table('book_genres',
-    db.Column('book_id', db.Integer, db.ForeignKey('books.id', ondelete='CASCADE'), primary_key=True),
-    db.Column('genre_id', db.Integer, db.ForeignKey('genres.id', ondelete='CASCADE'), primary_key=True)
-)
 
 class Book(db.Model):
     __tablename__ = 'books'
@@ -62,15 +53,6 @@ class Book(db.Model):
     genres = db.relationship('Genre', secondary='book_genres', back_populates='books')
     reviews = db.relationship('Review', backref='book', lazy=True, cascade="all, delete-orphan")
 
-class Review(db.Model):
-    __tablename__ = 'reviews'  # <-- исправлено
-    id = db.Column(db.Integer, primary_key=True)
-    book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='CASCADE'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    rating = db.Column(db.Integer, nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(20), default='pending')
-    created_at = db.Column(db.DateTime, nullable=False, server_default=db.func.now())
 
 class BookView(db.Model):
     __tablename__ = 'book_views'  # <-- исправлено
@@ -83,3 +65,25 @@ class BookView(db.Model):
 
     book = db.relationship('Book', backref='views')
     user = db.relationship('User', backref='book_views')
+    
+class Genre(db.Model):
+    __tablename__ = 'genres'  # <-- исправлено
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    books = db.relationship('Book', secondary='book_genres', back_populates='genres')
+
+book_genres = db.Table('book_genres',
+    db.Column('book_id', db.Integer, db.ForeignKey('books.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('genre_id', db.Integer, db.ForeignKey('genres.id', ondelete='CASCADE'), primary_key=True)
+)
+
+class Review(db.Model):
+    __tablename__ = 'reviews'  # <-- исправлено
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.id', ondelete='CASCADE'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), default='pending')
+    created_at = db.Column(db.DateTime, nullable=False, server_default=db.func.now())
+
