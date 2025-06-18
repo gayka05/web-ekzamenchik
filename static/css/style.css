@@ -293,6 +293,10 @@ body {
     box-shadow: 0 4px 10px rgba(106, 76, 147, 0.3);
 }
 
+.search-form button:hover {
+    background-color: var(--btn-bg-hover);
+    color: var(--btn-text-hover);
+}
 
 /* Сетка книг */
 .books-grid {
@@ -506,4 +510,102 @@ body {
 .modal-footer .btn-secondary:hover {
     background-color: var(--yellow-dark);
     color: var(--purple-dark);
+}
+
+
+/* Контейнер формы входа */
+.login-container {
+    width: 340px;
+    height: 340px;
+    margin: 60px auto;
+    background: #fffaf0;
+    border: 2px solid #c9b9e8;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(140,123,190,0.13);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding: 32px 28px;
+}
+
+.login-container h2 {
+    text-align: center;
+    color: #6a4c93;
+    margin-bottom: 18px;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #6a4c93;
+    font-size: 1rem;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    border: 2px solid #c9b9e8;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: #fff;
+    color: #3a2f5a;
+    transition: border-color 0.2s;
+}
+
+.login-container input[type="text"]:focus,
+.login-container input[type="password"]:focus {
+    border-color: #6a4c93;
+    outline: none;
+}
+
+.login-container .checkbox-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    color: #6a4c93;
+    font-size: 0.97rem;
+    font-weight: 500;
+}
+
+.login-container .checkbox-label input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #fbc02d;
+}
+
+/* Кнопка входа */
+.login-container button[type="submit"] {
+    width: 100%;
+    padding: 12px 0;
+    background: #8c7bbe;
+    color: #fff9c4;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(140, 123, 190, 0.25);
+    transition: background 0.3s, color 0.3s;
+}
+
+.login-container button[type="submit"]:hover {
+    background: #fbc02d;
+    color: #6a4c93;
+}
+
+/* Сообщения об ошибках */
+.login-container .error {
+    background: #ffeaea;
+    color: #c00;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 0.97rem;
+    border: 1px solid #ffd2d2;
+    text-align: center;
 }
